@@ -1,4 +1,4 @@
-package com.spring.finaltest;
+package com.spring.bm;
 
 import java.text.DateFormat;
 import java.util.Date;
