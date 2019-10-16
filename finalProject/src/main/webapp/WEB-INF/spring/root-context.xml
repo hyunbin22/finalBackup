@@ -1,8 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 	
-	<!-- Root Context: defines shared resources visible to all other web components -->
+<!-- Root Context: defines shared resources visible to all other web components -->
+	<!-- DB연결에 필요한 데이터를 BasicDataSource객체에  값을 넣음 -->
+	<bean id="realDataSource" class="org.apache.commons.dbcp.BasicDataSource" 
+	destroy-method="close">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+		<property name="username" value="final1"/>
+		<property name="password" value="1234"/>
+	</bean>
+	<!-- 로그를 출력하기 위한 라이브러리추가 -->
+	<bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+		<constructor-arg ref="realDataSource"/>
+		<property name="logFormatter">
+			<bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter">
+				<property name="loggingType" value="MULTI_LINE"/>
+				<property name="sqlPrefix" value="[SQL]"/>
+			</bean>
+		</property>	
+	</bean>
+	
+	<!-- Mybatis에서 SqlSession객체를 생성하는 factoryBean을 springbean으로 등록 -->
+	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="mapperLocations" value="classpath*:mapper/**/*.xml"/>
+		<property name="configLocation" value="classpath:mybatis-config.xml"></property>
+	</bean>	
+	<!-- SessionTemplate을 springbean으로 등록하여 활용 -->
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactoryBean"/>	
+	</bean>		
+	
+	<!-- 트렌젝션처리 -->
+	<!-- 트렌잭션을 처리할 bean을 등록을 해줌, 이건, spring 제공 -->
+	<bean id="transactionManager" 
+	class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	<!-- 어노테이션방식으로 처리하기 -->
+	<!-- <tx:annotation-driven transaction-manager="transactionManager"/> -->
+	
+	<!-- 선언적방식으로 트랜잭션처리 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="insert*" rollback-for="Exception"/>
+			<tx:method name="update*" rollback-for="Exception"/>
+			<tx:method name="delete*" rollback-for="Exception"/>
+		</tx:attributes>
+	</tx:advice>
+	<!-- aop와 연결하여 트랜잭션을 적용 -->
+	<aop:config>
+		<aop:pointcut expression="execution(* com.kh.spring..*ServiceImpl.*(..))" 
+		id="serviceMethod"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethod"/>
+	</aop:config>
+	
 		
 </beans>
+

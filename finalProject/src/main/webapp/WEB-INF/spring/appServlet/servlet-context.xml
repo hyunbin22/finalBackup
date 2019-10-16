@@ -21,7 +21,41 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="com.spring.finaltest" />
+	<context:component-scan base-package="com.spring.bm" />
+	
+	<!-- 인터셉터등록하기 -->
+	<interceptors>
+		<interceptor>
+			<mapping path="/demo/*"/>
+			<mapping path="/board/*"/>
+			<!-- <exclude-mapping path="/member/*"/> -->
+			<beans:bean id="loggerInterceptor" class="com.spring.bm.common.interceptor.LoggerInterceptor"/>
+		</interceptor>	
+	</interceptors>
+	
+	<beans:bean id="multipartResolver" 
+	class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="maxUploadSize" value="10485760"/>
+	</beans:bean>
+	
+	<!-- jsonView 등록하기 -->
+	<beans:bean id='viewResolver' 
+	class="org.springframework.web.servlet.view.BeanNameViewResolver">
+		<beans:property name="order" value="1"/>
+	</beans:bean>
+	<beans:bean id="jsonView" class="net.sf.json.spring.web.servlet.view.JsonView"/>
+	
+	<beans:bean id="jacksonMessageConverter" 
+	class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+	<beans:bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<beans:property name="messageConverters">
+			<beans:list>
+				<beans:ref bean="jacksonMessageConverter"/>
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+	
+	
 	
 	
 	
