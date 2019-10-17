@@ -16,20 +16,20 @@
 	
 	<!-- 사원등록 -->
 	<insert id="insertEmp" parameterType="map">
-		INSERT INTO EMPLOYEE VALUES(SEQ_EMPLOYEE.NEXTVAL,)
-		<selectKey keyProperty="empNo" resultType="string" order="AFTER">
+		INSERT INTO EMPLOYEE VALUES(SEQ_EMPLOYEE.NEXTVAL,#{deptNo}, #{jobNo}, #{empSal}, #{empId}, #{empPassword}, #{empName}
+			,#{empEmail}, #{empSSN}, #{empBank}, #{empBankNum}, default, null, default)
+		<selectKey keyProperty="empNo" resultType="_int" order="AFTER">
 			SELECT SEQ_EMPLOYEE.CURRVAL FROM DUAL
 		</selectKey>
 	</insert>
 	<!-- 사원첨부파일등록 -->
 	<insert id="insertEmpFile" parameterType="map">
-		INSERT INTO EMPFILE VALUES(SEQ_EMPFILE.NEXTVAL,)
+		INSERT INTO EMPFILE VALUES(SEQ_EMPFILE.NEXTVAL,#{empNo}, #{efcName}, #{efOrgName}, #{efReName})
 	</insert>
 	<!-- 사원등록끝 -->
 	
-	
 	<!-- 사원상세보기 -->
-	<select id="selectEmployee" resultType="map" parameterType="_int">
+	<select id="selectEmpOne" resultType="map" parameterType="_int">
 		SELECT * FROM EMPLOYEE WHERE EMPNO=#{empNo}
 	</select>
 	<select id="selectEmpFileList" resultType="map" parameterType="_int">

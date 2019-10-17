@@ -35,7 +35,7 @@ public class EmployeeController {
 	/* 사원등록 */
 	@RequestMapping("/emp/insertEmp.do")	//사원등록 폼으로 전환
 	public String insertEmp() {
-		return "/employee/empForm";
+		return "/emp/empForm";
 	}
 	
 	@RequestMapping("/emp/insertEmpEnd.do")	//사원 등록 완료
@@ -62,8 +62,8 @@ public class EmployeeController {
 				} catch(Exception e) {
 					e.printStackTrace();
 				}
-				fMap.put("oriFileName", oriFileName);
-				fMap.put("reName", reName);
+				fMap.put("efOrgname", oriFileName);
+				fMap.put("efReName", reName);
 				fileList.add(fMap);
 			}
 		}
@@ -107,6 +107,18 @@ public class EmployeeController {
 		mv.addObject("count", totalCount);
 		mv.addObject("list", list);
 		mv.setViewName("emp/empList");
+		return mv;
+	}
+	
+	/* 사원상세보기 */
+	@RequestMapping("/emp/selectEmpOne.do")
+	public ModelAndView selectEmpOne(int empNo) {
+		Map<String, String> empMap = service.selectEmpOne(empNo);
+		
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("emp", empMap);
+		mv.setViewName("emp/selectEmpOne");
+		
 		return mv;
 	}
 

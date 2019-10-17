@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
 <configuration>
+	<settings>
+		<!-- Null 값이 발생할 경우 빈칸이 아닌 null로 인식하라 -->
+		<setting name="jdbcTypeForNull" value="NULL"/>
+	</settings>
 	<typeAliases>
-		<typeAlias type="com.spring.bm.common.ArrayTypeHandler" alias="arrType"/>
+		<!-- <typeAlias type="com.kh.spring.demo.model.vo.Dev" alias="dev"/> -->
+		
 	</typeAliases>
+
 </configuration>

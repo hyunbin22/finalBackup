@@ -17,4 +17,6 @@ public interface EmployeeDao {
 	/* 사원첨부파일등록 */
 	int insertEmpFile(SqlSessionTemplate session, Map<String, String> m);
 	/* 사원등록끝 */
+	/* 사원상세보기 */
+	Map<String, String> selectEmpOne(SqlSessionTemplate session, int empNo);
 }
