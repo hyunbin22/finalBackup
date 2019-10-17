@@ -62,12 +62,3 @@ public class PageBarFactory {
 	
 	
 }
-
-
-
-
-
-
-
-
-

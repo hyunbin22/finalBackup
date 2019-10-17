@@ -37,6 +37,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		if(result == 0) throw new Exception();
 		if(fileList.size()>0) {
 			for(Map<String,String> m : fileList) {
+				m.put("empNo", param.get("empNo"));
 				result = dao.insertEmpFile(session, m);
 				if(result == 0) throw new Exception();
 			}
@@ -44,6 +45,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return result;
 	}
 	
+	/* 사원상세보기 */
+	@Override
+   public Map<String, String> selectEmpOne(int empNo) {
+      return dao.selectEmpOne(session, empNo);
+   }
 	
 	
 }

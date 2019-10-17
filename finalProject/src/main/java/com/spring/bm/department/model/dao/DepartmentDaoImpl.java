@@ -1,0 +1,33 @@
+package com.spring.bm.department.model.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class DepartmentDaoImpl implements DepartmentDao {
+
+	/* 부서등록 */
+	@Override
+	public int insertDept(SqlSessionTemplate session, Map<String, String> param) {
+		// TODO Auto-generated method stub
+		return session.insert("dept.insertDept", param);
+	}
+
+	/* 부서리스트 출력 */
+	@Override
+	public List<Map<String, String>> selectDeptList(SqlSessionTemplate session) {
+		// TODO Auto-generated method stub
+		return session.selectList("dept.selectDeptList");
+	}
+
+	/* 부서수정 */
+	@Override
+	public int updateDeptStatus(SqlSessionTemplate session, Map<String, String> map) {
+		// TODO Auto-generated method stub
+		return session.update("dept.updateDeptStatus", map);
+	}
+
+}
