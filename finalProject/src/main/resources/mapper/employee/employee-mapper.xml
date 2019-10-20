@@ -2,14 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="emp">
 	<!-- 사원리스트 불러오기 -->
-	<select id="selectEmpList">
-		SELECT A.*,
-				(SELECT COUNT(*)
-					FROM EMPFILE
-					WHERE EMPNO=A.EMPNO) AS EMPFILECOUNT
-		FROM EMPLOYEE A ORDER BY JOB
+	<select id="selectEmpList" resultType="map">
+		SELECT A.*, DEPTNAME, JOBNAME
+		FROM DEPARTMENT D JOIN EMPLOYEE A ON (A.DEPTNO = D.DEPTNO)
+		JOIN EMPJOB J ON (A.JOBNO=J.JOBNO)
+		ORDER BY A.JOBNO
 	</select>
-	<select id="selectEmpCount">
+	<select id="selectEmpCount" resultType="_int">
 		SELECT COUNT(*) FROM EMPLOYEE
 	</select>
 	<!-- 사원리스트 불러오기끝 -->
@@ -37,3 +36,4 @@
 	</select>
 	<!-- 사원상세보기끝 -->
 </mapper>
+

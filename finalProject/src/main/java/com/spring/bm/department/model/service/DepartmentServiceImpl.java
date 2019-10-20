@@ -1,11 +1,12 @@
 package com.spring.bm.department.model.service;
 
-import java.util.List;
+import java.util.List; 
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.bm.department.model.dao.DepartmentDao;
@@ -41,6 +42,15 @@ public class DepartmentServiceImpl implements DepartmentService {
 		if(result > 0) throw new Exception();
 		return result;
 	}
+
+	/* 부서상세 */
+	@Override
+	public Map<String, String> selectDeptOne(int deptNo) {
+		// TODO Auto-generated method stub
+		return dao.selectDeptOne(session, deptNo);
+	}
+	
+	
 	
 	
 

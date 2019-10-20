@@ -14,3 +14,4 @@ public interface EmployeeService {
 	/* 사원상세보기 */
 	Map<String, String> selectEmpOne(int empNo);
 }
+

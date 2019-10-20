@@ -1,3 +1,4 @@
+
 package com.spring.bm.employee.controller;
 
 import java.io.File;
@@ -35,13 +36,15 @@ public class EmployeeController {
 	/* 사원등록 */
 	@RequestMapping("/emp/insertEmp.do")	//사원등록 폼으로 전환
 	public String insertEmp() {
-		return "/emp/empForm";
+		return "emp/empEnroll";
 	}
 	
 	@RequestMapping("/emp/insertEmpEnd.do")	//사원 등록 완료
 	public ModelAndView insertEmpEnd(@RequestParam Map<String, String> param,
 			@RequestParam(value="upFile", required=false) MultipartFile[] upFile,
 			HttpServletRequest request) {
+		
+		param.replace("empPassword", pwEncoder.encode(param.get("empPassword")));
 		
 		String saveDir = request.getSession().getServletContext().getRealPath("/resources/upload/emp");
 		Map<String, String> fMap = new HashMap();
@@ -123,3 +126,4 @@ public class EmployeeController {
 	}
 
 }
+

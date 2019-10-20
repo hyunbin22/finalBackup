@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -16,6 +17,7 @@ import com.spring.bm.department.model.service.DepartmentService;
 
 @Controller
 public class DepartmentController {
+
 	
 	private Logger logger = LoggerFactory.getLogger(DepartmentController.class);
 	
@@ -24,8 +26,23 @@ public class DepartmentController {
 	
 	/* 부서등록 */
 	@RequestMapping("/dept/insertDept.do")
-	public String insertDept() {
-		return "/dept/deptForm";
+	public String insertDept(Model model) {
+		model.addAttribute("temp", "등록");
+		return "dept/deptEnroll";
+	}
+	
+	/* 부서보기/수정 */
+	@RequestMapping("/dept/updateDept.do")
+	public ModelAndView updateDept(int deptNo, Model model) {
+		
+		Map<String, String> dept = service.selectDeptOne(deptNo);
+		
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("dept", dept);
+		mv.addObject("temp", "수정");
+		mv.setViewName("dept/deptEnroll");
+
+		return mv;
 	}
 	
 	@RequestMapping("/dept/insertDeptEnd.do")
@@ -89,9 +106,7 @@ public class DepartmentController {
 		mv.addObject("loc", loc);
 		mv.setViewName("common/msg");
 		return mv;
-	}
-	
-	
-	
+	}	
 
 }
+
