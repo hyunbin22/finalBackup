@@ -4,7 +4,6 @@ package com.spring.bm.employee.controller;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +24,7 @@ import com.spring.bm.common.PageBarFactory;
 import com.spring.bm.department.model.service.DepartmentService;
 import com.spring.bm.empjob.model.service.EmpJobService;
 import com.spring.bm.employee.model.service.EmployeeService;
+import com.spring.bm.employee.model.vo.EmpFile;
 
 @Controller
 public class EmployeeController {
@@ -56,18 +56,60 @@ public class EmployeeController {
 	@RequestMapping("/emp/insertEmpEnd.do")	//사원 등록 완료
 	public ModelAndView insertEmpEnd(@RequestParam Map<String, String> param,
 			@RequestParam(value="upFile", required=false) MultipartFile[] upFile,
+			@RequestParam(value="proImg", required=false) MultipartFile proImg,
+			@RequestParam(value="stampImg", required=false) MultipartFile stampImg,
 			HttpServletRequest request) {
 		logger.debug(param.get("password"));
 		String empPassword = pwEncoder.encode((String)param.get("password"));
 		param.put("empPassword", empPassword);
 		
 		String saveDir = request.getSession().getServletContext().getRealPath("/resources/upload/emp");
-		Map<String, String> fMap = new HashMap();
-		List<Map<String, String>> fileList = new ArrayList();
+
+		List<EmpFile> fileList = new ArrayList();
 		
 		File dir = new File(saveDir);
 		
 		if(!dir.exists()) logger.debug("생성결과 : " + dir.mkdir());
+		if(!proImg.isEmpty()) {
+			String oriFileName=proImg.getOriginalFilename();
+			String ext=oriFileName.substring(oriFileName.lastIndexOf("."));
+			//규칙설정
+			SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMdd_HHMMssSSS");
+			int rdv=(int)(Math.random()*1000);
+			String reName=sdf.format(System.currentTimeMillis())+"_"+rdv+ext;
+			//파일 실제 저장하기
+			try {
+				proImg.transferTo(new File(saveDir+"/"+reName));
+			}catch (Exception e) {//IlligalStateException|IOException
+				e.printStackTrace();
+			}
+			EmpFile ef = new EmpFile();
+			ef.setEfcName("증명사진");
+			ef.setEfOrgName(oriFileName);
+			ef.setEfReName(reName);
+			fileList.add(ef);
+		}
+		if(!stampImg.isEmpty()) {
+			String oriFileName=stampImg.getOriginalFilename();
+			String ext=oriFileName.substring(oriFileName.lastIndexOf("."));
+			//규칙설정
+			SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMdd_HHMMssSSS");
+			int rdv=(int)(Math.random()*1000);
+			String reName=sdf.format(System.currentTimeMillis())+"_"+rdv+ext;
+			//파일 실제 저장하기
+			try {
+				stampImg.transferTo(new File(saveDir+"/"+reName));
+			}catch (Exception e) {//IlligalStateException|IOException
+				e.printStackTrace();
+			}
+			EmpFile ef = new EmpFile();
+			ef.setEfcName("결재도장");
+			ef.setEfOrgName(oriFileName);
+			ef.setEfReName(reName);
+			fileList.add(ef);
+		}
+		
+		
 		for(MultipartFile f : upFile) {
 			if(!f.isEmpty()) {
 				//파일명 생성(rename)
@@ -83,11 +125,14 @@ public class EmployeeController {
 				}catch (Exception e) {//IlligalStateException|IOException
 					e.printStackTrace();
 				}
-				fMap.put("efOrgname", oriFileName);
-				fMap.put("efReName", reName);
-				fileList.add(fMap);
+				EmpFile ef = new EmpFile();
+				ef.setEfcName("자격증");
+				ef.setEfOrgName(oriFileName);
+				ef.setEfReName(reName);
+				fileList.add(ef);
 			}
 		}
+		
 		
 		int result = 0;
 		try {
@@ -139,7 +184,7 @@ public class EmployeeController {
 		
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("emp", empMap);
-		if(temp.trim().equals("프로필")) {
+		if(temp.trim().equals("증명사진")) {
 			mv.setViewName("emp/myPage.do");
 		} else {
 			mv.setViewName("emp/selectEmpOne");

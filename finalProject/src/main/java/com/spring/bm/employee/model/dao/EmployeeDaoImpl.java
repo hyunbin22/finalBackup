@@ -8,6 +8,8 @@ import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.spring.bm.employee.model.vo.EmpFile;
+
 @Repository
 public class EmployeeDaoImpl implements EmployeeDao {
 
@@ -34,9 +36,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	
 	/* 사원첨부파일등록 */
 	@Override
-	public int insertEmpFile(SqlSessionTemplate session, Map<String, String> m) {
+	public int insertEmpFile(SqlSessionTemplate session, EmpFile e) {
 		// TODO Auto-generated method stub
-		return session.insert("emp.insertEmpFile", m);
+		return session.insert("emp.insertEmpFile", e);
 	}
 	/* 사원등록끝 */
 	

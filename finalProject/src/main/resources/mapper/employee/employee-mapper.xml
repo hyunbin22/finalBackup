@@ -15,9 +15,9 @@
 	
 	<!-- 사원등록 -->
 	<insert id="insertEmp" parameterType="map">
-		INSERT INTO EMPLOYEE VALUES(SEQ_EMPLOYEE.NEXTVAL,#{deptNo}, #{jobNo}, #{empSal}, #{empId}, #{empPassword}, #{empName}
-			,#{empEmail}, #{empSSN}, #{empBank}, #{empBankNum}, default, null, default)
-		<selectKey keyProperty="empNo" resultType="_int" order="AFTER">
+		INSERT INTO EMPLOYEE VALUES(SEQ_EMPLOYEE.NEXTVAL,#{deptNo}, #{jobNo}, #{empSal}, #{empId}, #{empPassword}, #{empName},#{empPhone}
+			,#{empEmail}, #{empAddr},#{empSSN}, #{empBank}, #{empBankNum}, default, null, default)
+		<selectKey keyProperty="empNo" resultType="string" order="AFTER">
 			SELECT SEQ_EMPLOYEE.CURRVAL FROM DUAL
 		</selectKey>
 	</insert>
