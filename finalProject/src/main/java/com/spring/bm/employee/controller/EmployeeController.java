@@ -15,12 +15,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.bm.common.PageBarFactory;
+import com.spring.bm.department.model.service.DepartmentService;
+import com.spring.bm.empjob.model.service.EmpJobService;
 import com.spring.bm.employee.model.service.EmployeeService;
 
 @Controller
@@ -31,11 +34,22 @@ public class EmployeeController {
 	@Autowired
 	EmployeeService service;
 	@Autowired
+	DepartmentService dService;
+	@Autowired
+	EmpJobService jService;
+	@Autowired
 	BCryptPasswordEncoder pwEncoder;
 	
 	/* 사원등록 */
 	@RequestMapping("/emp/insertEmp.do")	//사원등록 폼으로 전환
-	public String insertEmp() {
+	public String insertEmp(Model model) {
+		
+		List<Map<String, String>> dept = dService.selectDeptList();
+		model.addAttribute("dept", dept);
+		
+		List<Map<String, String>> job = jService.empJobList();
+		model.addAttribute("job", job);
+		
 		return "emp/empEnroll";
 	}
 	
@@ -43,8 +57,9 @@ public class EmployeeController {
 	public ModelAndView insertEmpEnd(@RequestParam Map<String, String> param,
 			@RequestParam(value="upFile", required=false) MultipartFile[] upFile,
 			HttpServletRequest request) {
-		
-		param.replace("empPassword", pwEncoder.encode(param.get("empPassword")));
+		logger.debug(param.get("password"));
+		String empPassword = pwEncoder.encode((String)param.get("password"));
+		param.put("empPassword", empPassword);
 		
 		String saveDir = request.getSession().getServletContext().getRealPath("/resources/upload/emp");
 		Map<String, String> fMap = new HashMap();
@@ -55,14 +70,17 @@ public class EmployeeController {
 		if(!dir.exists()) logger.debug("생성결과 : " + dir.mkdir());
 		for(MultipartFile f : upFile) {
 			if(!f.isEmpty()) {
-				String oriFileName = f.getOriginalFilename();
-				String ext = oriFileName.substring(oriFileName.lastIndexOf("."));
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHMMssSSS");
-				int rdv = (int)(Math.random()*1000);
-				String reName = sdf.format(System.currentTimeMillis()+"_"+rdv+ext);
+				//파일명 생성(rename)
+				String oriFileName=f.getOriginalFilename();
+				String ext=oriFileName.substring(oriFileName.lastIndexOf("."));
+				//규칙설정
+				SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMdd_HHMMssSSS");
+				int rdv=(int)(Math.random()*1000);
+				String reName=sdf.format(System.currentTimeMillis())+"_"+rdv+ext;
+				//파일 실제 저장하기
 				try {
-					f.transferTo(new File(saveDir + "/" + reName));
-				} catch(Exception e) {
+					f.transferTo(new File(saveDir+"/"+reName));
+				}catch (Exception e) {//IlligalStateException|IOException
 					e.printStackTrace();
 				}
 				fMap.put("efOrgname", oriFileName);
@@ -115,12 +133,18 @@ public class EmployeeController {
 	
 	/* 사원상세보기 */
 	@RequestMapping("/emp/selectEmpOne.do")
-	public ModelAndView selectEmpOne(int empNo) {
+	public ModelAndView selectEmpOne(int empNo, String temp) {
 		Map<String, String> empMap = service.selectEmpOne(empNo);
+		
 		
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("emp", empMap);
-		mv.setViewName("emp/selectEmpOne");
+		if(temp.trim().equals("프로필")) {
+			mv.setViewName("emp/myPage.do");
+		} else {
+			mv.setViewName("emp/selectEmpOne");
+		}
+		
 		
 		return mv;
 	}

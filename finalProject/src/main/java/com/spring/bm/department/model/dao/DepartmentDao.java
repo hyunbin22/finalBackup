@@ -12,7 +12,7 @@ public interface DepartmentDao {
 	/* 부서리스트출력 */
 	List<Map<String, String>> selectDeptList(SqlSessionTemplate session);
 	/* 부서삭제 */
-	int updateDeptStatus(SqlSessionTemplate session, Map<String, String> map);
+	int updateDept(SqlSessionTemplate session, Map<String, Object> map);
 	/* 부서상세 */
 	Map<String, String> selectDeptOne(SqlSessionTemplate session, int deptNo);
 

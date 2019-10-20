@@ -11,17 +11,12 @@
 	<select id="selectDeptList" resultType="map">
 		SELECT D.DEPTNO, D.DEPTNAME, D.DEPTSTATUS, COUNT(A.EMPNO) AS COUNT FROM DEPARTMENT D
 		LEFT JOIN EMPLOYEE A ON (D.DEPTNO=A.DEPTNO) GROUP BY D.DEPTNO, D.DEPTNAME, D.DEPTSTATUS
+		ORDER BY D.DEPTNO
 	</select>
 	
 	<!-- 부서 수정 -->
-	<update id="updateDeptStatus" parameterType="_int">
-		UPDATE DEPARTMENT SET 
-		<if test="deptName != null">
-			DEPTNAME = #{deptName}
-		</if>
-		<if test="deptStatus != null">
-			,deptStatus = #{deptStatus}
-		</if>
+	<update id="updateDept" parameterType="map">
+		UPDATE DEPARTMENT SET DEPTNAME = #{deptName}, deptStatus = #{status}
 		WHERE DEPTNO=#{deptNo}
 	</update>
 	

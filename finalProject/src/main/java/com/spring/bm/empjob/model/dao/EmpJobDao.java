@@ -13,5 +13,7 @@ public interface EmpJobDao {
 	List<Map<String, String>> empJobList(SqlSessionTemplate session);
 	/* 직급수정 */
 	int updateEmpJob(SqlSessionTemplate session, Map<String, String> param);
+	/* 직급하나출력 */
+	Map<String, Object> selectEmpJobOne(SqlSessionTemplate session, int jobNo);
 
 }

@@ -32,7 +32,7 @@
                <div class="col-sm-9">
                   <select name = "deptNo" id = "deptNo" class="form-control">
                         <option value = "0">해당 부서를 선택하세요</option>
-                        <c:forEach items="${deptList}" var="dept">
+                        <c:forEach items="${dept}" var="dept">
                            <option value = "<c:out value='${dept["DEPTNAME"]}'/>"><c:out value='${dept["DEPTNAME"]}'/></option>
                         </c:forEach>
                      </select>
@@ -59,7 +59,7 @@
                <div class="col-sm-9">
                   <select name = "jobNo" id = "jobNo" class="form-control">
                         <option value = "0">해당 직급을 선택하세요</option>
-                        <c:forEach items="${jobList}" var="j">
+                        <c:forEach items="${job}" var="j">
                            <option value = "<c:out value='${j["JOBNAME"]}'/>"><c:out value='${j["JOBNAME"]}'/></option>
                         </c:forEach>
                      </select>
@@ -72,7 +72,7 @@
              <div class="form-group row">
                <label class="col-sm-3 col-form-label">비밀번호</label>
                <div class="col-sm-9">
-                 <input type="password" class="form-control" name="empPassword" required>
+                 <input type="password" class="form-control" name="password" required>
                </div>
              </div>
            </div>

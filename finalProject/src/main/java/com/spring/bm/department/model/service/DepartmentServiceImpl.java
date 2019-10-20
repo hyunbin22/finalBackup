@@ -35,11 +35,12 @@ public class DepartmentServiceImpl implements DepartmentService {
 		return dao.selectDeptList(session);
 	}
 	
-	/* 부서삭제 */
+	/* 부서수정 */
 	@Override
-	public int updateDeptStatus(Map<String, String> map) throws Exception{
-		int result = dao.updateDeptStatus(session, map);
-		if(result > 0) throw new Exception();
+	public int updateDept(Map<String, Object> map) throws Exception{
+		int result = dao.updateDept(session, map);
+		System.out.println(result);
+		if(result < 0) throw new Exception();
 		return result;
 	}
 

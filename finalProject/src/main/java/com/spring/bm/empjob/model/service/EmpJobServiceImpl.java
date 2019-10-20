@@ -40,6 +40,14 @@ public class EmpJobServiceImpl implements EmpJobService {
 		
 		return result;
 	}
+
+	@Override
+	public Map<String, Object> selectEmpJobOne(int jobNo) {
+		// TODO Auto-generated method stub
+		return dao.selectEmpJobOne(session, jobNo);
+	}
+	
+	
 	
 	
 

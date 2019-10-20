@@ -33,10 +33,9 @@ public class DepartmentController {
 	
 	/* 부서보기/수정 */
 	@RequestMapping("/dept/updateDept.do")
-	public ModelAndView updateDept(int deptNo, Model model) {
+	public ModelAndView updateDept(int deptNo) {
 		
 		Map<String, String> dept = service.selectDeptOne(deptNo);
-		
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("dept", dept);
 		mv.addObject("temp", "수정");
@@ -82,26 +81,21 @@ public class DepartmentController {
 	}
 	
 	/* 부서수정하기 */
-	@RequestMapping("/dept/updateDept")
-	public ModelAndView deleteDept(@RequestParam(value="deptName", required=false) String deptName,
-			@RequestParam(value="status", required=false) String deptStatus, int deptNo) {
+	@RequestMapping("/dept/updateDeptEnd.do")
+	public ModelAndView deleteDept(@RequestParam Map<String, Object> map) {
 		
 		int result = 0;
-		Map<String, String> map = new HashMap();
-		if(deptName != null && deptName != "") map.put("deptName", deptName);
-		else if(deptStatus != null && deptStatus != "") map.put("deptStatus", deptStatus);
-			
+
 		try {
-			result = service.updateDeptStatus(map);
+			result = service.updateDept(map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 		ModelAndView mv = new ModelAndView();
 		String msg = "";
 		String loc = "/dept/deptList.do";
-		if(result > 0) msg = "부서가 사용중지되었습니다.";
-		else msg="부서사용중지가 실패하였습니다.";
+		if(result > 0) msg = "부서가 수정되었습니다.";
+		else msg="부서수정이 실패하였습니다.";
 		mv.addObject("msg", msg);
 		mv.addObject("loc", loc);
 		mv.setViewName("common/msg");

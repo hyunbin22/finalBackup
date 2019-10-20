@@ -11,5 +11,7 @@ public interface EmpJobService {
 	List<Map<String, String>> empJobList();
 	/* 직급수정 */
 	int updateEmpJob(Map<String, String> param) throws Exception;
+	/* 직급하나출력 */
+	Map<String, Object> selectEmpJobOne(int jobNo);
 
 }

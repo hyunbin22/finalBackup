@@ -50,7 +50,7 @@
 	
 	
 	<!-- Application Loggers -->
-	<logger name="com.kh.spring">
+	<logger name="com.spring.bm">
 		<level value="debug" /><!--  얘는 중요하다 -->
 		<!-- level 단계를 의미
 		trace -> debug(개발시에 사용하는 로그들) 

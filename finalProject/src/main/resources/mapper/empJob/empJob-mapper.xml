@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="empJob">
-
+	<!-- 직급등록 -->
+	<insert id="insertEmpJob" parameterType="map">
+		INSERT INTO EMPJOB VALUES(SEQ_EMPJOB.NEXTVAL,#{jobName},#{jobStatus},default)
+	</insert>
+	
+	<!-- 직급리스트출력 -->
+	<select id="empJobList" resultType="map">
+		SELECT J.JOBNO, J.JOBNAME, J.JOBSTATUS, COUNT(A.EMPNO) AS COUNT FROM EMPJOB J
+		LEFT JOIN EMPLOYEE A ON (J.JOBNO=A.JOBNO) GROUP BY J.JOBNO, J.JOBNAME, J.JOBSTATUS
+		ORDER BY J.JOBNO
+	</select>
+	
+	<!-- 직급수정 -->
+	<update id="updateEmpJob" parameterType="map">
+		UPDATE EMPJOB SET JOBNAME=#{jobName}, jobStatus=#{jobStatus}
+		WHERE JOBNO=#{jobNo}	
+	</update>
+	
+	<!-- 직급하나출력 -->
+	<select id="selectEmpJobOne" parameterType="_int" resultType="map">
+		SELECT * FROM EMPJOB WHERE JOBNO=#{jobNo}
+	</select>
 </mapper>

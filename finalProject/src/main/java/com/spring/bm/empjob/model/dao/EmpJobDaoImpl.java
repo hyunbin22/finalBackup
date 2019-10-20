@@ -26,6 +26,13 @@ public class EmpJobDaoImpl implements EmpJobDao {
 		// TODO Auto-generated method stub
 		return session.update("empJob.updateEmpJob", param);
 	}
+
+	@Override
+	public Map<String, Object> selectEmpJobOne(SqlSessionTemplate session, int jobNo) {
+		// TODO Auto-generated method stub
+		return session.selectOne("empJob.selectEmpJobOne", jobNo);
+	}
+	
 	
 	
 

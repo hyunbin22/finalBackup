@@ -25,9 +25,9 @@ public class DepartmentDaoImpl implements DepartmentDao {
 
 	/* 부서수정 */
 	@Override
-	public int updateDeptStatus(SqlSessionTemplate session, Map<String, String> map) {
+	public int updateDept(SqlSessionTemplate session, Map<String, Object> map) {
 		// TODO Auto-generated method stub
-		return session.update("dept.updateDeptStatus", map);
+		return session.update("dept.updateDept", map);
 	}
 
 	/* 부서상세 */
