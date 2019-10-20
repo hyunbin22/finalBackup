@@ -30,4 +30,14 @@ public class DepartmentDaoImpl implements DepartmentDao {
 		return session.update("dept.updateDeptStatus", map);
 	}
 
+	/* 부서상세 */
+	@Override
+	public Map<String, String> selectDeptOne(SqlSessionTemplate session, int deptNo) {
+		// TODO Auto-generated method stub
+		return session.selectOne("dept.selectDeptOne", deptNo);
+	}
+	
+	
+
+
 }
